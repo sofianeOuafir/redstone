@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :countries
+  resources :users
   resources :posts
   resources :places do
     match '/scrape', to: 'vehicles#scrape', via: :post, on: :collection

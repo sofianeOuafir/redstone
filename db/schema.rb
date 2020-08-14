@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_11_191056) do
+ActiveRecord::Schema.define(version: 2020_08_13_194843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "countries", force: :cascade do |t|
+    t.string "name"
+    t.string "country_code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "places", force: :cascade do |t|
     t.string "name"
@@ -21,6 +28,8 @@ ActiveRecord::Schema.define(version: 2020_08_11_191056) do
     t.datetime "updated_at", precision: 6, null: false
     t.float "lat"
     t.float "lng"
+    t.bigint "country_id", null: false
+    t.index ["country_id"], name: "index_places_on_country_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -28,8 +37,19 @@ ActiveRecord::Schema.define(version: 2020_08_11_191056) do
     t.bigint "place_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
     t.index ["place_id"], name: "index_posts_on_place_id"
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "username"
+    t.string "profile_picture_url"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "places", "countries"
   add_foreign_key "posts", "places"
+  add_foreign_key "posts", "users"
 end
